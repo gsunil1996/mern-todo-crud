@@ -1,5 +1,5 @@
 const express = require("express");
-
+const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
@@ -10,6 +10,7 @@ const routes = require("./routes/ToDoRoute");
 const app = express();
 const PORT = process.env.PORT;
 
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
 
