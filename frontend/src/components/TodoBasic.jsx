@@ -9,6 +9,11 @@ const TodoBasic = () => {
   const [data, setData] = useState([]);
   const [text, setText] = useState("");
 
+  const [editedText, setEditedText] = useState("");
+  const [editClicked, setEditClicked] = useState("");
+
+
+
   const getTodo = () => {
     axios
       .get("http://localhost:5000")
@@ -28,14 +33,33 @@ const TodoBasic = () => {
       .catch((error) => console.log(error));
   };
 
+    const cancel = () => {
+      setEditClicked("");
+      setEditedText("");
+    };
+
+  const editToggle = (_id) => {
+     axios
+       .patch("http://localhost:5000/update", {
+         _id,
+         text: editedText,
+       })
+       .then((res) => {
+         console.log(res);
+         getTodo();
+       })
+       .catch((err) => console.log(err));
+    cancel()
+  };
+
   const deleteTodo = (_id) => {
     axios
-      .delete("http://localhost:5000/delete", { _id })
+      .delete("http://localhost:5000/delete", { data: { _id } })
       .then((res) => {
         console.log(res);
         getTodo();
       })
-        .catch((error) => console.log(error));
+      .catch((error) => console.log(error));
   };
 
   useEffect(() => {
@@ -88,7 +112,19 @@ const TodoBasic = () => {
                     padding: "10px",
                   }}
                 >
-                  <div style={{ fontWeight: 600 }}>{item.text}</div>
+                  {item._id === editClicked ? (
+                    <div style={{ width: "100%" }}>
+                      <input
+                        type="text"
+                        value={editedText}
+                        onChange={(e) => setEditedText(e.target.value)}
+                        style={{ background: "#fff", width: "90%" }}
+                      />
+                    </div>
+                  ) : (
+                    <div style={{ fontWeight: 600 }}>{item.text}</div>
+                  )}
+
                   <div
                     style={{
                       display: "flex",
@@ -96,12 +132,38 @@ const TodoBasic = () => {
                       gap: "10px",
                     }}
                   >
-                    <Button
-                      variant="contained"
-                      style={{ background: "#755139FF", color: "#F2EDD7FF" }}
-                    >
-                      Edit
-                    </Button>
+                    {item._id === editClicked ? (
+                      <>
+                        <Button
+                          variant="contained"
+                          style={{
+                            background: "#755139FF",
+                            color: "#F2EDD7FF",
+                          }}
+                          onClick={() => cancel()}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          variant="contained"
+                          style={{
+                            background: "#755139FF",
+                            color: "#F2EDD7FF",
+                          }}
+                          onClick={() => editToggle(item._id)}
+                        >
+                          Save
+                        </Button>
+                      </>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        style={{ background: "#755139FF", color: "#F2EDD7FF" }}
+                        onClick={() => setEditClicked(item._id)}
+                      >
+                        Edit
+                      </Button>
+                    )}
 
                     <Button
                       variant="contained"
