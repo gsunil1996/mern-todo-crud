@@ -132,7 +132,7 @@ const TodoBasic = () => {
     setDeleteLoader(true);
     setTimeout(() => {
       axios
-        .delete("http://localhost:5000/delete", { data: { _id } })
+        .delete(`http://localhost:5000/delete/${_id}`)
         .then((res) => {
           console.log(res);
           setSuccessMessage("Data Deleted Successfully");
@@ -143,7 +143,7 @@ const TodoBasic = () => {
           handleClickOpen();
         })
         .catch((error) => {
-          console.log(error);
+          console.log(error.message);
           setErrorMessage("Something went wrong");
           setSuccessMessage("");
           setDeleteLoader(false);
@@ -216,9 +216,7 @@ const TodoBasic = () => {
                     marginTop: "10px",
                     background: "#101820FF",
                     color: "#FEE715FF",
-                    cursor: "pointer"
                   }}
-                  onClick={() => navigate(`/todo/${item._id}`)}
                 >
                   <CardContent
                     style={{
@@ -238,7 +236,12 @@ const TodoBasic = () => {
                         />
                       </div>
                     ) : (
-                      <div style={{ fontWeight: 600 }}>{item.text}</div>
+                      <div
+                        style={{ fontWeight: 600, cursor: "pointer" }}
+                        onClick={() => navigate(`/todo/${item._id}`)}
+                      >
+                        {item.text}
+                      </div>
                     )}
 
                     <div

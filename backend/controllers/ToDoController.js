@@ -31,20 +31,26 @@ module.exports.saveToDo = async (req, res) => {
   }
 };
 
-module.exports.deleteToDo = (req, res) => {
-  const { _id } = req.body;
+module.exports.deleteToDo = async (req, res) => {
+  console.log("id ---> ", req.params.id);
 
-  console.log("id ---> ", _id);
-
-  ToDoModel.findByIdAndDelete(_id)
-    .then(() => res.set(201).send("Deleted Successfully..."))
-    .catch((err) => console.log(err));
+  try {
+    const todo = await ToDoModel.findByIdAndDelete(req.params.id).lean();
+    console.log("Deleted Successfully...");
+    return res.status(200).send(todo);
+  } catch (err) {
+    return res.status(400).send(err.message);
+  }
 };
 
-module.exports.updateToDo = (req, res) => {
+module.exports.updateToDo = async (req, res) => {
   const { _id, text } = req.body;
 
-  ToDoModel.findByIdAndUpdate(_id, { text })
-    .then(() => res.set(201).send("Updated Successfully..."))
-    .catch((err) => console.log(err));
+  try {
+    const todo = await ToDoModel.findByIdAndUpdate(_id, { text }).lean();
+    console.log("Updated Successfully...");
+    return res.status(200).send(todo);
+  } catch (err) {
+    return res.status(400).send(err.message);
+  }
 };
