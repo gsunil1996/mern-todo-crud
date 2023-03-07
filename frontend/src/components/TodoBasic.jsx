@@ -14,8 +14,10 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import SaveIcon from "@mui/icons-material/Save";
+import { useNavigate } from "react-router-dom";
 
 const TodoBasic = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [noData, setNoData] = useState(false);
   const [text, setText] = useState("");
@@ -214,7 +216,9 @@ const TodoBasic = () => {
                     marginTop: "10px",
                     background: "#101820FF",
                     color: "#FEE715FF",
+                    cursor: "pointer"
                   }}
+                  onClick={() => navigate(`/todo/${item._id}`)}
                 >
                   <CardContent
                     style={{
