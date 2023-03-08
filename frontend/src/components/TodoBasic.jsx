@@ -80,6 +80,9 @@ const TodoBasic = () => {
           setCreateLoader(false);
           getTodo();
           handleClickOpen();
+          setTimeout(() => {
+            handleClose();
+          }, 1000);
         })
         .catch((error) => {
           console.log(error);
@@ -87,6 +90,9 @@ const TodoBasic = () => {
           setSuccessMessage("");
           setCreateLoader(false);
           handleClickOpen();
+          setTimeout(() => {
+            handleClose();
+          }, 1000);
         });
     }, 1000);
   };
@@ -112,6 +118,9 @@ const TodoBasic = () => {
           setUpdateLoader(false);
           cancel();
           handleClickOpen();
+          setTimeout(() => {
+            handleClose();
+          }, 1000);
         })
         .catch((err) => {
           console.log(err);
@@ -119,6 +128,9 @@ const TodoBasic = () => {
           setSuccessMessage("");
           setUpdateLoader(false);
           handleClickOpen();
+          setTimeout(() => {
+            handleClose();
+          }, 1000);
         });
     }, 1000);
   };
@@ -141,13 +153,19 @@ const TodoBasic = () => {
           setDeleteLoader(false);
           getTodo();
           handleClickOpen();
+          setTimeout(() => {
+            handleClose();
+          }, 1000);
         })
         .catch((error) => {
-          console.log(error.message);
+          console.log(error);
           setErrorMessage("Something went wrong");
           setSuccessMessage("");
           setDeleteLoader(false);
           handleClickOpen();
+          setTimeout(() => {
+            handleClose();
+          }, 1000);
         });
     }, 1000);
   };
