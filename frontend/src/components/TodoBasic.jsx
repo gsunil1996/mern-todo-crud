@@ -71,9 +71,9 @@ const TodoBasic = () => {
     setCreateLoader(true);
 
     try {
-      const { data } = await axios.post("http://localhost:5000/save", { text })
+      const { data } = await axios.post("http://localhost:5000/save", { text });
       setTimeout(() => {
-        console.log(data)
+        console.log(data);
         setText("");
         setSuccessMessage("Data Added Successfully");
         setErrorMessage("");
@@ -85,9 +85,8 @@ const TodoBasic = () => {
       setTimeout(() => {
         handleClose();
       }, 1000);
-
     } catch (error) {
-      console.log(error)
+      console.log(error);
       setErrorMessage("Something went wrong");
       setSuccessMessage("");
       setCreateLoader(false);
@@ -96,7 +95,6 @@ const TodoBasic = () => {
         handleClose();
       }, 1000);
     }
-
   };
 
   const cancel = () => {
@@ -111,7 +109,7 @@ const TodoBasic = () => {
       const { data } = await axios.patch("http://localhost:5000/update", {
         _id,
         text: editedText,
-      })
+      });
 
       setTimeout(() => {
         console.log(data);
@@ -126,7 +124,6 @@ const TodoBasic = () => {
       setTimeout(() => {
         handleClose();
       }, 1000);
-
     } catch (error) {
       console.log(error);
       setErrorMessage("Something went wrong");
@@ -137,7 +134,6 @@ const TodoBasic = () => {
         handleClose();
       }, 1000);
     }
-
   };
 
   const deleteItem = (_id) => {
@@ -149,7 +145,9 @@ const TodoBasic = () => {
     setDeleteLoader(true);
 
     try {
-      const { data } = await axios.delete(`http://localhost:5000/delete/${_id}`)
+      const { data } = await axios.delete(
+        `http://localhost:5000/delete/${_id}`
+      );
 
       setTimeout(() => {
         console.log(data);
@@ -164,7 +162,6 @@ const TodoBasic = () => {
       setTimeout(() => {
         handleClose();
       }, 1000);
-
     } catch (error) {
       console.log(error);
       setErrorMessage("Something went wrong");
@@ -331,7 +328,11 @@ const TodoBasic = () => {
                           }}
                           disabled
                         >
-                          <CircularProgress style={{ color: "#fff" }} />
+                          {deleteLoader ? (
+                            <CircularProgress style={{ color: "#fff" }} />
+                          ) : (
+                            "Save"
+                          )}
                         </Button>
                       ) : (
                         <Button
