@@ -11,22 +11,20 @@ const TodoSingle = () => {
   const [loader, setLoader] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const getData = () => {
+  const getData = async () => {
     setLoader(true);
-    setTimeout(() => {
-      axios
-        .get(`http://localhost:5000/todo/${params.id}`)
-        .then((res) => {
-          // console.log("res.data", res.data);
-          setData(res.data);
-          setLoader(false);
-        })
-        .catch((error) => {
-          console.log("error.message", error.message);
-          setErrorMessage(error.message);
-          setLoader(false);
-        });
-    }, 500);
+    try {
+      const { data } = await axios.get(`http://localhost:5000/todo/${params.id}`)
+      console.log("User Detail", data)
+      setTimeout(() => {
+        setData(data);
+        setLoader(false);
+      }, 500);
+    } catch (error) {
+      console.log("error.message", error.message);
+      setErrorMessage(error.message);
+      setLoader(false);
+    }
   };
 
   useEffect(() => {

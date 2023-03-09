@@ -47,54 +47,56 @@ const TodoBasic = () => {
     setOpen(false);
   };
 
-  const getTodo = () => {
+  const getTodo = async () => {
     setDataLoader(true);
-    axios
-      .get("http://localhost:5000")
-      .then((res) => {
-        if (res.data.length === 0) {
-          setNoData(true);
-        } else {
-          setNoData(false);
-          setData(res.data);
-          setDataError("");
-        }
-        setDataLoader(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setDataError(error.message);
-        setDataLoader(false);
-      });
+
+    try {
+      const { data } = await axios.get(`http://localhost:5000/`);
+      if (data.length === 0) {
+        setNoData(true);
+      } else {
+        setNoData(false);
+        setData(data);
+        setDataError("");
+      }
+      setDataLoader(false);
+    } catch (error) {
+      console.log(error);
+      setDataError(error.message);
+      setDataLoader(false);
+    }
   };
 
-  const addTodo = () => {
+  const addTodo = async () => {
     setCreateLoader(true);
-    setTimeout(() => {
-      axios
-        .post("http://localhost:5000/save", { text })
-        .then((res) => {
-          setText("");
-          setSuccessMessage("Data Added Successfully");
-          setErrorMessage("");
-          setCreateLoader(false);
-          getTodo();
-          handleClickOpen();
-          setTimeout(() => {
-            handleClose();
-          }, 1000);
-        })
-        .catch((error) => {
-          console.log(error);
-          setErrorMessage("Something went wrong");
-          setSuccessMessage("");
-          setCreateLoader(false);
-          handleClickOpen();
-          setTimeout(() => {
-            handleClose();
-          }, 1000);
-        });
-    }, 1000);
+
+    try {
+      const { data } = await axios.post("http://localhost:5000/save", { text })
+      setTimeout(() => {
+        console.log(data)
+        setText("");
+        setSuccessMessage("Data Added Successfully");
+        setErrorMessage("");
+        setCreateLoader(false);
+        getTodo();
+        handleClickOpen();
+      }, 500);
+
+      setTimeout(() => {
+        handleClose();
+      }, 1000);
+
+    } catch (error) {
+      console.log(error)
+      setErrorMessage("Something went wrong");
+      setSuccessMessage("");
+      setCreateLoader(false);
+      handleClickOpen();
+      setTimeout(() => {
+        handleClose();
+      }, 1000);
+    }
+
   };
 
   const cancel = () => {
@@ -102,37 +104,40 @@ const TodoBasic = () => {
     setEditedText("");
   };
 
-  const editTodo = (_id) => {
+  const editTodo = async (_id) => {
     setUpdateLoader(true);
-    setTimeout(() => {
-      axios
-        .patch("http://localhost:5000/update", {
-          _id,
-          text: editedText,
-        })
-        .then((res) => {
-          console.log(res);
-          getTodo();
-          setSuccessMessage("Data Updated Successfully");
-          setErrorMessage("");
-          setUpdateLoader(false);
-          cancel();
-          handleClickOpen();
-          setTimeout(() => {
-            handleClose();
-          }, 1000);
-        })
-        .catch((err) => {
-          console.log(err);
-          setErrorMessage("Something went wrong");
-          setSuccessMessage("");
-          setUpdateLoader(false);
-          handleClickOpen();
-          setTimeout(() => {
-            handleClose();
-          }, 1000);
-        });
-    }, 1000);
+
+    try {
+      const { data } = await axios.patch("http://localhost:5000/update", {
+        _id,
+        text: editedText,
+      })
+
+      setTimeout(() => {
+        console.log(data);
+        getTodo();
+        setSuccessMessage("Data Updated Successfully");
+        setErrorMessage("");
+        setUpdateLoader(false);
+        cancel();
+        handleClickOpen();
+      }, 500);
+
+      setTimeout(() => {
+        handleClose();
+      }, 1000);
+
+    } catch (error) {
+      console.log(error);
+      setErrorMessage("Something went wrong");
+      setSuccessMessage("");
+      setUpdateLoader(false);
+      handleClickOpen();
+      setTimeout(() => {
+        handleClose();
+      }, 1000);
+    }
+
   };
 
   const deleteItem = (_id) => {
@@ -140,34 +145,36 @@ const TodoBasic = () => {
     deleteTodo(_id);
   };
 
-  const deleteTodo = (_id) => {
+  const deleteTodo = async (_id) => {
     setDeleteLoader(true);
-    setTimeout(() => {
-      axios
-        .delete(`http://localhost:5000/delete/${_id}`)
-        .then((res) => {
-          console.log(res);
-          setSuccessMessage("Data Deleted Successfully");
-          setErrorMessage("");
-          setDeleteClicked("");
-          setDeleteLoader(false);
-          getTodo();
-          handleClickOpen();
-          setTimeout(() => {
-            handleClose();
-          }, 1000);
-        })
-        .catch((error) => {
-          console.log(error);
-          setErrorMessage("Something went wrong");
-          setSuccessMessage("");
-          setDeleteLoader(false);
-          handleClickOpen();
-          setTimeout(() => {
-            handleClose();
-          }, 1000);
-        });
-    }, 1000);
+
+    try {
+      const { data } = await axios.delete(`http://localhost:5000/delete/${_id}`)
+
+      setTimeout(() => {
+        console.log(data);
+        setSuccessMessage("Data Deleted Successfully");
+        setErrorMessage("");
+        setDeleteClicked("");
+        setDeleteLoader(false);
+        getTodo();
+        handleClickOpen();
+      }, 500);
+
+      setTimeout(() => {
+        handleClose();
+      }, 1000);
+
+    } catch (error) {
+      console.log(error);
+      setErrorMessage("Something went wrong");
+      setSuccessMessage("");
+      setDeleteLoader(false);
+      handleClickOpen();
+      setTimeout(() => {
+        handleClose();
+      }, 1000);
+    }
   };
 
   useEffect(() => {
